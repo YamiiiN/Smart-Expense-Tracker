@@ -5,5 +5,5 @@ load_dotenv()
 
 MONGO_URI = os.getenv("MONGO_URI")
 client = AsyncIOMotorClient(MONGO_URI)
-db = client.get_default_database()  # or client['smart-expense']
+db = client.get_default_database()  
 users_collection = db['users']
