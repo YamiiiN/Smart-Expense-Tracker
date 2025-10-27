@@ -4,6 +4,7 @@ import { View, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-nat
 import axios from 'axios';
 import styles from '../styles/commonStyles';
 
+
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,7 +13,7 @@ export default function LoginScreen({ navigation }) {
     try {
       const res = await axios.post('http://10.123.224.172:8000/login', { email, password });
       Alert.alert('Success', `Logged in! Token: ${res.data.access_token}`);
-      // later, navigate to Home or save token to SecureStore
+      navigation.navigate('Dashboard', { token: res.data.access_token });
       
     } catch (err) {
       Alert.alert('Error', err.response?.data?.detail || 'Login failed');

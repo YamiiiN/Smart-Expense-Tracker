@@ -38,6 +38,7 @@ async function register(name, email, password, avatarUri) {
 async function login(email, password) {
   const res = await API.post("/login", { email, password });
   await SecureStore.setItemAsync('token', res.data.access_token);
+  console.log("Token stored securely: ", res.data.access_token);
 }
 
 app.listen(8000, () => console.log("Server running on port 8000"));
