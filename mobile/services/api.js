@@ -1,8 +1,14 @@
 // services/api.js
 import axios from 'axios';
 export const API = axios.create({
-  baseURL: "https://10.123.224.172" 
+  baseURL: "http://10.123.224.172" 
 });
+
+import * as SecureStore from 'expo-secure-store';
+await SecureStore.setItemAsync('token', token);
+const token = await SecureStore.getItemAsync('token');
+if (token) API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
 
 // Upload avatar
 async function uploadAvatar(uri, filename) {
@@ -34,7 +40,4 @@ async function login(email, password) {
   await SecureStore.setItemAsync('token', res.data.access_token);
 }
 
-import * as SecureStore from 'expo-secure-store';
-await SecureStore.setItemAsync('token', token);
-const token = await SecureStore.getItemAsync('token');
-if (token) API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+app.listen(8000, () => console.log("Server running on port 8000"));

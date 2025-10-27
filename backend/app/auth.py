@@ -11,6 +11,10 @@ ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60"))
 
 def get_password_hash(password: str):
+    password = str(password)
+    if len(password) > 72:
+        password = password[:72]  # truncate safely
+        print("Password length:", len(password))
     return pwd_context.hash(password)
 
 def verify_password(plain, hashed):

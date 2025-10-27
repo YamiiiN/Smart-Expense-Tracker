@@ -10,9 +10,10 @@ export default function LoginScreen({ navigation }) {
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post('https://10.123.224.172/login', { email, password });
+      const res = await axios.post('http://10.123.224.172:8000/login', { email, password });
       Alert.alert('Success', `Logged in! Token: ${res.data.access_token}`);
       // later, navigate to Home or save token to SecureStore
+      
     } catch (err) {
       Alert.alert('Error', err.response?.data?.detail || 'Login failed');
     }

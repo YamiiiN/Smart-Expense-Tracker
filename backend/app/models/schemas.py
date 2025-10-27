@@ -2,9 +2,9 @@ from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 
 class UserCreate(BaseModel):
-    name: str = Field(...)
-    email: EmailStr = Field(...)
-    password: str = Field(...)
+    name: str
+    email: str
+    password: str
     avatar_url: Optional[str] = None
 
 class UserOut(BaseModel):

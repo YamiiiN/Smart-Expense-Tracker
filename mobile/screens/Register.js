@@ -4,14 +4,14 @@ import { View, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-nat
 import axios from 'axios';
 import styles from '../styles/commonStyles';
 
-export default function RegisterScreen({ navigation }) {
+export default function Register({ navigation }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleRegister = async () => {
     try {
-      await axios.post('https://10.123.224.172/register', { name, email, password });
+      await axios.post('http://10.123.224.172:8000/register', { name, email, password });
       Alert.alert('Success', 'Account created!');
       navigation.navigate('Login');
     } catch (err) {

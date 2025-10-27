@@ -13,16 +13,30 @@ app = FastAPI()
 async def register(user: UserCreate):
     existing = await users_collection.find_one({"email": user.email})
     if existing:
-        raise HTTPException(400, "Email already registered")
+        raise HTTPException(status_code=400, detail="Email already registered")
+
     hashed = get_password_hash(user.password)
-    doc = {"name": user.name, "email": user.email, "password": hashed, "avatar_url": user.avatar_url}
-    res = await users_collection.insert_one(doc)
-    doc["id"] = str(res.inserted_id)
-    return UserOut(id=doc["id"], name=doc["name"], email=doc["email"], avatar_url=doc.get("avatar_url"))
+
+    new_user = {
+        "name": user.name,
+        "email": user.email,
+        "password": hashed,
+        "avatar_url": user.avatar_url
+    }
+
+    result = await users_collection.insert_one(new_user)
+
+    created_user = await users_collection.find_one({"_id": result.inserted_id})
+
+    return UserOut(
+        id=str(created_user["_id"]),
+        name=created_user["name"],
+        email=created_user["email"],
+        avatar_url=created_user.get("avatar_url")
+    )
 
 @app.post("/login", response_model=Token)
 async def login(form_data: dict):
-    # Accept JSON: {"email": "...", "password": "..."}
     email = form_data.get("email")
     password = form_data.get("password")
     user = await users_collection.find_one({"email": email})
