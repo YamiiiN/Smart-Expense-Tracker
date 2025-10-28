@@ -77,8 +77,8 @@ export async function login(email, password) {
 
 export async function getCurrentUser() {
   try {
-    const res = await API.get("/me"); // assuming your backend route to get user info is /me
-    return res.data; // { name: "Ky", email: "...", ... }
+    const res = await API.get("/me");
+    return res.data; 
   } catch (error) {
     console.error("Error fetching current user:", error);
     throw error;

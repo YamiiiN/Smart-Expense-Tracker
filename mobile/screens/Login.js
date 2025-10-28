@@ -20,7 +20,7 @@ export default function LoginScreen({ navigation }) {
 
     Alert.alert('Success', `Logged in! Token: ${token}`);
     
-    navigation.navigate('Dashboard'); // no need to pass token, Dashboard reads from SecureStore
+    navigation.navigate('MainScreen'); // no need to pass token, Dashboard reads from SecureStore
   } catch (err) {
     Alert.alert('Error', err.response?.data?.detail || 'Login failed');
   }

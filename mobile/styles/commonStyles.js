@@ -510,4 +510,107 @@ dashboardContainer: {
   navButton: {
     alignItems: "center",
   },
+
+  profileContainer: {
+  flex: 1,
+  alignItems: "center",
+  justifyContent: "flex-start",
+  padding: 20,
+  backgroundColor: "#fff",
+},
+
+profileTitle: {
+  fontSize: 22,
+  fontWeight: "bold",
+  color: "#2F3E46",
+  marginBottom: 20,
+  marginTop: 40
+},
+
+profileAvatar: {
+  width: 120,
+  height: 120,
+  borderRadius: 60,
+  marginBottom: 10,
+},
+
+changePhotoText: {
+  fontSize: 12,
+  color: "#007B83",
+  textAlign: "center",
+  marginBottom: 20,
+},
+
+inputContainer: {
+  width: "100%",
+  marginTop: 10,
+},
+
+inputLabel: {
+  fontSize: 14,
+  color: "#333",
+  marginTop: 10,
+},
+
+input: {
+  borderWidth: 1,
+  borderColor: "#ccc",
+  borderRadius: 8,
+  padding: 10,
+  marginTop: 5,
+  fontSize: 16,
+  fontWeight: "bold",
+},
+
+readOnlyInput: {
+  backgroundColor: "#f5f5f5",
+},
+
+buttonRow: {
+  flexDirection: "row",
+  justifyContent: "center",
+  marginTop: 20,
+  width: "100%",
+},
+
+editButton: {
+  backgroundColor: "#2F3E46",
+  padding: 12,
+  borderRadius: 10,
+  width: "80%",
+  alignItems: "center",
+},
+
+saveButton: {
+  backgroundColor: "#38B000",
+  padding: 12,
+  borderRadius: 10,
+  width: "40%",
+  alignItems: "center",
+  marginRight: 10,
+},
+
+cancelButton: {
+  backgroundColor: "#A8A8A8",
+  padding: 12,
+  borderRadius: 10,
+  width: "40%",
+  alignItems: "center",
+},
+
+logoutButton: {
+  marginTop: 30,
+  padding: 12,
+  backgroundColor: "#FF6B6B",
+  borderRadius: 10,
+  width: "80%",
+  alignItems: "center",
+},
+
+logoutText: {
+  color: "#fff",
+  fontWeight: "bold",
+  fontSize: 16,
+},
+
 });

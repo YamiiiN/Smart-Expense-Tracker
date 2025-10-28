@@ -8,6 +8,10 @@ from app.db import users_collection
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from dotenv import load_dotenv
+import cloudinary
+import cloudinary.uploader
+import aiofiles
+import asyncio
 
 load_dotenv()
 
@@ -51,4 +55,23 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
-    
+async def upload_file_to_cloudinary(file_path: str) -> str:
+    """
+    Uploads a file asynchronously to Cloudinary and returns its secure URL.
+    """
+    try:
+        loop = asyncio.get_event_loop()
+        upload_result = await loop.run_in_executor(
+            None, lambda: cloudinary.uploader.upload(file_path)
+        )
+        return upload_result["secure_url"]
+    except Exception as e:
+        print("❌ Cloudinary upload failed:", str(e))
+        raise HTTPException(status_code=500, detail="Failed to upload file to Cloudinary")
+    finally:
+        # Clean up temp file safely
+        if os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+            except Exception as e:
+                print(f"⚠️ Failed to delete temp file: {e}")

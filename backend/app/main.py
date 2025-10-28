@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, UploadFile, File, Depends
+from fastapi import FastAPI, HTTPException, UploadFile, File, Depends, Form
 from app.db import users_collection
 from app.models.schemas import UserCreate, UserOut, Token
 from app.auth import get_password_hash, verify_password, create_access_token, get_current_user
@@ -6,6 +6,8 @@ from bson import ObjectId
 import aiofiles
 import os
 from app.cloudinary_utils import upload_file_to_cloudinary
+import tempfile
+
 
 app = FastAPI()
 
@@ -67,3 +69,99 @@ async def read_current_user(current_user: dict = Depends(get_current_user)):
         "email": current_user["email"],
         "avatar_url": current_user.get("avatar_url")
     }
+
+# @app.put("/me/update", response_model=UserOut)
+# async def update_current_user(
+#     name: str = Form(...),
+#     email: str = Form(...),
+#     avatar: UploadFile = File(None),
+#     current_user: dict = Depends(get_current_user)
+# ):
+#     update_data = {"name": name, "email": email}
+
+#     if avatar:
+#         # Use a system temp directory (works on Windows too)
+#         tmp_dir = tempfile.gettempdir()
+#         tmp_path = os.path.join(tmp_dir, avatar.filename)
+
+#         async with aiofiles.open(tmp_path, "wb") as f:
+#             content = await avatar.read()
+#             await f.write(content)
+
+#         # Upload to Cloudinary
+#         url = await upload_file_to_cloudinary(tmp_path)
+
+#         # Clean up local file
+#         try:
+#             os.remove(tmp_path)
+#         except:
+#             pass
+
+#         update_data["avatar_url"] = url
+
+#     # Update MongoDB
+#     await users_collection.update_one(
+#         {"_id": current_user["_id"]},
+#         {"$set": update_data}
+#     )
+
+#     updated_user = await users_collection.find_one({"_id": current_user["_id"]})
+#     return {
+#         "id": str(updated_user["_id"]),
+#         "name": updated_user["name"],
+#         "email": updated_user["email"],
+#         "avatar_url": updated_user.get("avatar_url")
+#     }
+
+@app.put("/me/update")
+async def update_current_user(
+    name: str = Form(...),
+    email: str = Form(...),
+    avatar: UploadFile = File(None),
+    current_user: dict = Depends(get_current_user)
+):
+    try:
+        update_data = {"name": name, "email": email}
+
+        if avatar:
+            # Use a system temp directory (works on Windows, Linux, macOS)
+            tmp_dir = tempfile.gettempdir()
+            tmp_path = os.path.join(tmp_dir, avatar.filename)
+
+            async with aiofiles.open(tmp_path, "wb") as f:
+                content = await avatar.read()
+                await f.write(content)
+
+            # Upload to Cloudinary
+            url = await upload_file_to_cloudinary(tmp_path)
+
+            # Clean up local file
+            try:
+                os.remove(tmp_path)
+            except Exception as e:
+                print("Warning: could not delete temp file:", e)
+
+            update_data["avatar_url"] = url
+
+        # Update MongoDB
+        await users_collection.update_one(
+            {"_id": current_user["_id"]},
+            {"$set": update_data}
+        )
+
+        updated_user = await users_collection.find_one({"_id": current_user["_id"]})
+
+        return {
+            "success": True,
+            "message": "Profile updated successfully",
+            "user": {
+                "id": str(updated_user["_id"]),
+                "name": updated_user["name"],
+                "email": updated_user["email"],
+                "avatar_url": updated_user.get("avatar_url")
+            }
+        }
+
+    except Exception as e:
+        print("❌ Error updating user:", e)
+        raise HTTPException(status_code=500, detail="Failed to update profile")
