@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, UploadFile, File, Depends
 from app.db import users_collection
 from app.models.schemas import UserCreate, UserOut, Token
-from app.auth import get_password_hash, verify_password, create_access_token
+from app.auth import get_password_hash, verify_password, create_access_token, get_current_user
 from bson import ObjectId
 import aiofiles
 import os
@@ -58,3 +58,12 @@ async def upload_avatar(file: UploadFile = File(...)):
     except:
         pass
     return {"url": url}
+
+@app.get("/me", response_model=UserOut)
+async def read_current_user(current_user: dict = Depends(get_current_user)):
+    return {
+        "id": str(current_user["_id"]),
+        "name": current_user["name"],
+        "email": current_user["email"],
+        "avatar_url": current_user.get("avatar_url")
+    }

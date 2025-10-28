@@ -60,8 +60,6 @@ export async function register(name, email, password, avatarUri = null) {
 export async function login(email, password) {
   try {
     const res = await API.post("/login", { email, password });
-
-    // Store token securely
     await SecureStore.setItemAsync('token', res.data.access_token);
 
     // Set Axios header for future requests
@@ -75,4 +73,14 @@ export async function login(email, password) {
   }
 }
 
-app.listen(8000, () => console.log("Server running on port 8000"));
+// app.listen(8000, () => console.log("Server running on port 8000"));
+
+export async function getCurrentUser() {
+  try {
+    const res = await API.get("/me"); // assuming your backend route to get user info is /me
+    return res.data; // { name: "Ky", email: "...", ... }
+  } catch (error) {
+    console.error("Error fetching current user:", error);
+    throw error;
+  }
+}

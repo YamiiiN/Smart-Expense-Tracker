@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { View, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 import axios from 'axios';
+import * as SecureStore from "expo-secure-store";
 import styles from '../styles/commonStyles';
 
 
@@ -10,15 +11,20 @@ export default function LoginScreen({ navigation }) {
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
-    try {
-      const res = await axios.post('http://10.123.224.172:8000/login', { email, password });
-      Alert.alert('Success', `Logged in! Token: ${res.data.access_token}`);
-      navigation.navigate('Dashboard', { token: res.data.access_token });
-      
-    } catch (err) {
-      Alert.alert('Error', err.response?.data?.detail || 'Login failed');
-    }
-  };
+  try {
+    const res = await axios.post('http://10.123.224.172:8000/login', { email, password });
+    const token = res.data.access_token;
+
+    // Save token to SecureStore
+    await SecureStore.setItemAsync('token', token);
+
+    Alert.alert('Success', `Logged in! Token: ${token}`);
+    
+    navigation.navigate('Dashboard'); // no need to pass token, Dashboard reads from SecureStore
+  } catch (err) {
+    Alert.alert('Error', err.response?.data?.detail || 'Login failed');
+  }
+};
 
   return (
     <LinearGradient
