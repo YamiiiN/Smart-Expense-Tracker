@@ -1,43 +1,78 @@
 import axios from 'axios';
+import * as SecureStore from 'expo-secure-store';
+
 export const API = axios.create({
-  baseURL: "http://10.123.224.172" 
+  baseURL: "http://10.123.224.172:8000" 
 });
 
-import * as SecureStore from 'expo-secure-store';
-await SecureStore.setItemAsync('token', token);
-const token = await SecureStore.getItemAsync('token');
-if (token) API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+export async function setTokenHeader() {
+  try {
+    const token = await SecureStore.getItemAsync('token');
+    if (token) {
+      API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    }
+  } catch (error) {
+    console.error("Error reading token from SecureStore:", error);
+  }
+}
 
+setTokenHeader();
 
 // Upload avatar
-async function uploadAvatar(uri, filename) {
-  const form = new FormData();
-  form.append("file", {
-    uri,
-    name: filename || "avatar.jpg",
-    type: "image/jpeg"
-  });
-  const res = await API.post("/upload-avatar", form, {
-    headers: { "Content-Type": "multipart/form-data" }
-  });
-  return res.data.url; // cloudinary url
-}
+// export async function uploadAvatar(uri, filename = 'avatar.jpg') {
+//   try {
+//     const form = new FormData();
+//     form.append("file", {
+//       uri,
+//       name: filename,
+//       type: "image/jpeg"
+//     });
+
+//     const res = await API.post("/upload-avatar", form, {
+//       headers: { "Content-Type": "multipart/form-data" }
+//     });
+
+//     return res.data.url; // Cloudinary URL
+//   } catch (error) {
+//     console.error("Error uploading avatar:", error);
+//     throw error;
+//   }
+// }
 
 // Register
-async function register(name, email, password, avatarUri) {
-  let avatar_url = null;
-  if (avatarUri) {
-    avatar_url = await uploadAvatar(avatarUri, "avatar.jpg");
+export async function register(name, email, password, avatarUri = null) {
+  try {
+    let avatar_url = null;
+    if (avatarUri) {
+      avatar_url = await uploadAvatar(avatarUri);
+    }
+
+    const res = await API.post("/register", { name, email, password, avatar_url });
+    return res.data;
+  } catch (error) {
+    console.error("Error registering user:", error);
+    throw error;
   }
-  const res = await API.post("/register", { name, email, password, avatar_url });
-  return res.data;
 }
 
+
 // Login
-async function login(email, password) {
-  const res = await API.post("/login", { email, password });
-  await SecureStore.setItemAsync('token', res.data.access_token);
-  console.log("Token stored securely: ", res.data.access_token);
+export async function login(email, password) {
+  try {
+    const res = await API.post("/login", { email, password });
+
+    // Store token securely
+    await SecureStore.setItemAsync('token', res.data.access_token);
+
+    // Set Axios header for future requests
+    API.defaults.headers.common['Authorization'] = `Bearer ${res.data.access_token}`;
+
+    console.log("Token stored securely:", res.data.access_token);
+    return res.data;
+  } catch (error) {
+    console.error("Error logging in:", error);
+    throw error;
+  }
 }
 
 app.listen(8000, () => console.log("Server running on port 8000"));
