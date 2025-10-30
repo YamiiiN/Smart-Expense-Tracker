@@ -1,0 +1,6 @@
+/backend/app/__pycache__/
+/backend/venv/
+/backend/.env
+/mobile/.env
+/mobile/node_modules/
+/mobile/.expo/
