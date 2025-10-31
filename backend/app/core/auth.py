@@ -4,7 +4,7 @@ from passlib.context import CryptContext
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from bson import ObjectId
-from app.db import users_collection
+from app.core.db import users_collection
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from dotenv import load_dotenv
