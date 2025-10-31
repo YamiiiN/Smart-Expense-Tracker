@@ -5,6 +5,8 @@ import * as ImagePicker from "expo-image-picker";
 import { API, getCurrentUser } from "../services/api";
 import styles from "../styles/commonStyles";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../services/auth";
+
 
 export default function Profile() {
   const navigation = useNavigation();
@@ -15,6 +17,7 @@ export default function Profile() {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { logout } = useAuth();
 
   // Fetch current user info
   useEffect(() => {
@@ -102,12 +105,17 @@ export default function Profile() {
   };
 
   // Logout
- const handleLogout = async () => {
-  await SecureStore.deleteItemAsync("token");
-  Alert.alert("Logged Out", "You have been successfully logged out.", [
-    { text: "OK", onPress: () => navigation.navigate("Home") },
-  ]);
-};
+  //  const handleLogout = async () => {
+  //   await SecureStore.deleteItemAsync("token");
+  //   Alert.alert("Logged Out", "You have been successfully logged out.", [
+  //     { text: "OK", onPress: () => navigation.navigate("Home") },
+  //   ]);
+  // };
+  const handleLogout = async () => {
+    await SecureStore.deleteItemAsync("token");
+    logout();
+    navigation.navigate("Login");
+  };
 
 
   return (

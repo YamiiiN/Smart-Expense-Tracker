@@ -4,23 +4,64 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './screens/Home';
 import Login from './screens/Login';
 import Register from './screens/Register';
-import Dashboard from './screens/Dashboard';
-import MainScreen from './screens/MainScreen';
-import Profile from './screens/Profile';
+// import Dashboard from './screens/Dashboard';
+// import MainScreen from './screens/MainScreen';
+// import Profile from './screens/Profile';
+import MainNavigator from './navigators/MainNav';
+import { AuthProvider } from './services/auth';
+import { useAuth } from './services/auth';
+import HomeNav from './navigators/HomeNav';
 
 const Stack = createNativeStackNavigator();
+function AppWrapper() {
+  const { isAuthenticated } = useAuth();
 
-export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
-        <Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
-        <Stack.Screen name="MainScreen" component={MainScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+      <Stack.Navigator initialRouteName="Login">
+        {isAuthenticated ? (
+          <Stack.Screen
+            name="MainNavigator"
+            component={MainNavigator}
+            options={{ headerShown: false }}
+          />
+        ) : (
+          <>
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Register"
+              component={Register}
+              options={{ headerShown: false }}
+            />
+          </>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppWrapper />
+    </AuthProvider>
+  );
+}
+
+// import { NavigationContainer } from "@react-navigation/native";
+// import { AuthProvider } from "./services/auth";
+// import MainNavigator from "./navigators/MainNav";
+
+// export default function App() {
+//   return (
+//     <AuthProvider>
+//       <NavigationContainer>
+//         <MainNavigator />
+//       </NavigationContainer>
+//     </AuthProvider>
+//   );
+// }

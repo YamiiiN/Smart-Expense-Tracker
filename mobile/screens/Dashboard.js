@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"; 
+import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import styles from "../styles/commonStyles";
@@ -12,38 +12,38 @@ export default function Dashboard() {
     { icon: "film-outline", label: "Movie", amount: "-₱120.00", color: "#FFA500" },
     { icon: "swap-horizontal-outline", label: "Transfer", amount: "+₱900.00", color: "#38B000" },
   ];
-//change code logic later
+  //change code logic later
 
-   useEffect(() => {
-  async function fetchUser() {
-    try {
-      // Check if token exists
-      const token = await SecureStore.getItemAsync('token');
-      console.log("Token from SecureStore:", token);
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        // Check if token exists
+        const token = await SecureStore.getItemAsync('token');
+        console.log("Token from SecureStore:", token);
 
-      if (!token) {
-        console.log("No token found, skipping fetchUser.");
-        return; // don't call /me if no token
+        if (!token) {
+          console.log("No token found, skipping fetchUser.");
+          return; // don't call /me if no token
+        }
+
+        // Set Axios header
+        API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        console.log("Authorization header set:", API.defaults.headers.common['Authorization']);
+
+        // Fetch user from backend
+        const user = await getCurrentUser();
+        console.log("Fetched user from API:", user);
+
+        // Update state
+        setUserName(user.name);
+        console.log("State updated, userName:", user.name);
+      } catch (err) {
+        console.error("Error in fetchUser:", err);
       }
-
-      // Set Axios header
-      API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      console.log("Authorization header set:", API.defaults.headers.common['Authorization']);
-
-      // Fetch user from backend
-      const user = await getCurrentUser();
-      console.log("Fetched user from API:", user);
-
-      // Update state
-      setUserName(user.name);
-      console.log("State updated, userName:", user.name);
-    } catch (err) {
-      console.error("Error in fetchUser:", err);
     }
-  }
 
-  fetchUser();
-}, []);
+    fetchUser();
+  }, []);
 
   return (
     <View style={styles.dashboardContainer}>
@@ -92,21 +92,6 @@ export default function Dashboard() {
         </View>
       </ScrollView>
 
-      {/* Bottom Navigation */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navButton}>
-          <Ionicons name="home" size={24} color="#2F3E46" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton}>
-          <FontAwesome5 name="camera" size={22} color="#A8A8A8" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton}>
-          <MaterialIcons name="bar-chart" size={24} color="#A8A8A8" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton}>
-          <FontAwesome5 name="user" size={22} color="#A8A8A8" />
-        </TouchableOpacity>
-      </View>
     </View>
   );
 }
