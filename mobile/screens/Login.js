@@ -12,7 +12,7 @@ export default function LoginScreen({ navigation }) {
 
   const handleLogin = async () => {
   try {
-    const res = await axios.post('http://10.123.224.172:8000/login', { email, password });
+    const res = await axios.post('http://192.168.0.103:8000/login', { email, password });
     const token = res.data.access_token;
 
     // Save token to SecureStore
