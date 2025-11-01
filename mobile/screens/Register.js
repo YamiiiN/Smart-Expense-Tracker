@@ -5,6 +5,7 @@ import axios from 'axios';
 import styles from '../styles/commonStyles';
 import { API } from '../services/api';
 import { useAuth } from '../services/auth';
+import * as SecureStore from 'expo-secure-store';  // Add this import
 
 
 export default function Register({ navigation }) {
@@ -13,38 +14,52 @@ export default function Register({ navigation }) {
   const [password, setPassword] = useState('');
   const { login } = useAuth();
 
-  // const handleRegister = async () => {
-  //   // try {
-  //   //   await axios.post('http://192.168.0.103:8000/register', { name, email, password });
-  //   //   Alert.alert('Success', 'Account created!');
-  //   //   navigation.navigate('Login');
-  //   // } catch (err) {
-  //   //   Alert.alert('Error', err.response?.data?.detail || 'Registration failed');
-  //   // }
-  //   try {
-  //     const res = await axios.post(`${API}/user/register`, { name, email, password });
+  const [isLoading, setIsLoading] = useState(false);
 
-  //     const token = res.data.access_token;
-
-  //     await SecureStore.setItemAsync("token", token);
-
-  //     login(token);
-  //   } catch (err) {
-  //     Alert.alert("Error", err.response?.data?.detail || "Registration failed");
-  //   }
-  // };
   const handleRegister = async () => {
     try {
-      const res = await API.post("/user/register", { name, email, password });
-      const token = res.data.access_token;
+      setIsLoading(true);
 
-      await SecureStore.setItemAsync("token", token);
+      // Input validation
+      if (!name || !email || !password) {
+        Alert.alert("Error", "Please fill in all fields");
+        return;
+      }
 
-      await login(email, password); // ✅ correct call
+      // Register the user
+      const registerResponse = await API.post("/user/register", {
+        name,
+        email,
+        password,
+      });
+
+      console.log("Registration successful:", registerResponse.data);
+
+      // Show success message and navigate to Login
+      Alert.alert(
+        "Success",
+        "Account created successfully! Please login.",
+        [
+          {
+            text: "OK",
+            onPress: () => navigation.navigate("Login")
+          }
+        ]
+      );
+
     } catch (err) {
-      Alert.alert("Error", err.response?.data?.detail || "Registration failed");
+      console.error("Registration error:", err);
+      console.error("Error details:", err.response?.data);
+
+      Alert.alert(
+        "Error",
+        err.response?.data?.detail || "Registration failed. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
+
   return (
     <LinearGradient
       colors={['#175C3A', '#2FAF7B']}

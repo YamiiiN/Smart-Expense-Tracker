@@ -13,7 +13,7 @@ export default function ProfileNav() {
             <Stack.Screen name="ProfileScreen" component={Profile} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} />
-            {/* <Stack.Screen name="Start" component={Start} /> */}
+            <Stack.Screen name="Start" component={Start} />
         </Stack.Navigator>
     );
 }

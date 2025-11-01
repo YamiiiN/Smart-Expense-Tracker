@@ -185,25 +185,43 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // const logout = async () => {
+  //   try {
+  //     // Remove token and user data from AsyncStorage
+  //     await AsyncStorage.removeItem('userToken');
+  //     await AsyncStorage.removeItem('userData');
+
+  //     // Clear state
+  //     setToken(null);
+  //     setUser(null);
+
+  //     console.log('User logged out successfully');
+
+  //     return true;
+  //   } catch (error) {
+  //     console.error('Error during logout:', error);
+  //     return false;
+  //   }
+  // };
   const logout = async () => {
     try {
       // Remove token and user data from AsyncStorage
       await AsyncStorage.removeItem('userToken');
       await AsyncStorage.removeItem('userData');
+      await SecureStore.deleteItemAsync('token'); // Add this line
 
       // Clear state
       setToken(null);
       setUser(null);
+      setIsAuthenticated(false); // Make sure this line is present
 
       console.log('User logged out successfully');
-
       return true;
     } catch (error) {
       console.error('Error during logout:', error);
       return false;
     }
   };
-
   const getToken = async () => {
     try {
       return await AsyncStorage.getItem('userToken');
@@ -222,7 +240,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     getToken,
     isAuthenticated,
-    getCurrentUser
+    getCurrentUser,
   };
 
   return (

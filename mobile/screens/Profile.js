@@ -105,21 +105,35 @@ export default function Profile() {
   };
 
   // const handleLogout = async () => {
-
   //   Alert.alert("Logged Out", "You have been successfully logged out.", [
-  //     { text: "OK", onPress: () => { logout(); navigation.navigate("Start")} },
-  //   ]);
-  // };
-  // const handleLogout = async () => {
-  //   Alert.alert("Logged Out", "You have been successfully logged out.", [
-  //     { text: "OK", onPress: () => { logout(); navigation.navigate("Start") } }
+  //     { text: "OK", onPress: () => logout() }
   //   ]);
   // };
 
   const handleLogout = async () => {
-    Alert.alert("Logged Out", "You have been successfully logged out.", [
-      { text: "OK", onPress: () => logout() }
-    ]);
+    Alert.alert(
+      "Logout",
+      "Are you sure you want to logout?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "Logout",
+          onPress: async () => {
+            try {
+              await logout();
+              // Use replace instead of reset
+              navigation.replace('Start');
+            } catch (error) {
+              console.error("Logout error:", error);
+              Alert.alert("Error", "Failed to logout. Please try again.");
+            }
+          }
+        }
+      ]
+    );
   };
 
 
