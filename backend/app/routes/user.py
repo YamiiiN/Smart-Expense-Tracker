@@ -8,6 +8,12 @@ import aiofiles
 import os
 import tempfile
 
+from pydantic import BaseModel
+
+class LoginInput(BaseModel):
+    email: str
+    password: str
+
 router = APIRouter(prefix="/user", tags=["Users"])
 
 @router.post("/register", response_model=UserOut)
@@ -34,13 +40,24 @@ async def register(user: UserCreate):
         avatar_url=created_user.get("avatar_url")
     )
 
+# @router.post("/login", response_model=Token)
+# async def login(form_data: dict):
+#     email = form_data.get("email")
+#     password = form_data.get("password")
+#     user = await users_collection.find_one({"email": email})
+#     if not user or not verify_password(password, user["password"]):
+#         raise HTTPException(401, "Invalid credentials")
+#     token = create_access_token({"sub": str(user["_id"]), "email": user["email"]})
+#     return {"access_token": token, "token_type": "bearer"}
 @router.post("/login", response_model=Token)
-async def login(form_data: dict):
-    email = form_data.get("email")
-    password = form_data.get("password")
+async def login(data: LoginInput):
+    email = data.email
+    password = data.password
+
     user = await users_collection.find_one({"email": email})
     if not user or not verify_password(password, user["password"]):
-        raise HTTPException(401, "Invalid credentials")
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
     token = create_access_token({"sub": str(user["_id"]), "email": user["email"]})
     return {"access_token": token, "token_type": "bearer"}
 

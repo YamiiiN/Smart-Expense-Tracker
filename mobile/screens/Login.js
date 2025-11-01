@@ -7,6 +7,8 @@ import styles from '../styles/commonStyles';
 // import { useAuth } from '../services/auth';
 import { API } from '../services/api';
 import { useAuth } from '../services/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -35,7 +37,7 @@ export default function LoginScreen({ navigation }) {
       login({ user: { ...userData, token } });
 
       Alert.alert("Success", "Logged in successfully!");
-      navigation.navigate('MainScreen');
+      // navigation.navigate('MainNavigator');
 
     } catch (err) {
       console.error(err);
@@ -43,41 +45,6 @@ export default function LoginScreen({ navigation }) {
     }
   };
 
-  // const handleLogin = async () => {
-  //   try {
-  //     const res = await axios.post(`${API}/user/login`, { email, password });
-  //     //   const token = res.data.access_token;
-
-  //     //   // Save token to SecureStore
-  //     //   await SecureStore.setItemAsync('token', token);
-
-  //     //   Alert.alert('Success', `Logged in! Token: ${token}`);
-
-  //     //   navigation.navigate('MainScreen'); // no need to pass token, Dashboard reads from SecureStore
-  //     // } catch (err) {
-  //     //   Alert.alert('Error', err.response?.data?.detail || 'Login failed');
-  //     // }const token = res.data.access_token;
-  //     const token = res.data.access_token; // ✅ get token
-
-  //     await SecureStore.setItemAsync("token", token); // ✅ save token
-
-  //     login(token);
-  //   } catch (err) {
-  //     Alert.alert('Error', err.response?.data?.detail || 'Login failed');
-  //   }
-  // };
-  // const handleLogin = async () => {
-  //   try {
-  //     const res = await API.post("/user/login", { email, password });
-  //     const token = res.data.access_token;
-
-  //     await SecureStore.setItemAsync("token", token);
-
-  //     await login(email, password); // ✅ correct call (since login expects email & password)
-  //   } catch (err) {
-  //     Alert.alert("Error", err.response?.data?.detail || "Login failed");
-  //   }
-  // };
   return (
     <LinearGradient
       colors={['#175C3A', '#2FAF7B']}

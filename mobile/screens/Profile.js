@@ -104,17 +104,22 @@ export default function Profile() {
     }
   };
 
-  // Logout
-  //  const handleLogout = async () => {
-  //   await SecureStore.deleteItemAsync("token");
+  // const handleLogout = async () => {
+
   //   Alert.alert("Logged Out", "You have been successfully logged out.", [
-  //     { text: "OK", onPress: () => navigation.navigate("Home") },
+  //     { text: "OK", onPress: () => { logout(); navigation.navigate("Start")} },
   //   ]);
   // };
+  // const handleLogout = async () => {
+  //   Alert.alert("Logged Out", "You have been successfully logged out.", [
+  //     { text: "OK", onPress: () => { logout(); navigation.navigate("Start") } }
+  //   ]);
+  // };
+
   const handleLogout = async () => {
-    await SecureStore.deleteItemAsync("token");
-    logout();
-    navigation.navigate("Login");
+    Alert.alert("Logged Out", "You have been successfully logged out.", [
+      { text: "OK", onPress: () => logout() }
+    ]);
   };
 
 

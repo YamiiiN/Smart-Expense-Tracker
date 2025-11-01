@@ -1,16 +1,12 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from './screens/Home';
 import Login from './screens/Login';
 import Register from './screens/Register';
-// import Dashboard from './screens/Dashboard';
-// import MainScreen from './screens/MainScreen';
-// import Profile from './screens/Profile';
 import MainNavigator from './navigators/MainNav';
 import { AuthProvider } from './services/auth';
 import { useAuth } from './services/auth';
-import HomeNav from './navigators/HomeNav';
+import Start from './screens/Start';
 
 const Stack = createNativeStackNavigator();
 function AppWrapper() {
@@ -18,7 +14,7 @@ function AppWrapper() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Start">
         {isAuthenticated ? (
           <Stack.Screen
             name="MainNavigator"
@@ -28,7 +24,12 @@ function AppWrapper() {
         ) : (
           <>
             <Stack.Screen
-              name="Login"
+              name="Start"
+              component={Start}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Login"rs
               component={Login}
               options={{ headerShown: false }}
             />
@@ -44,6 +45,7 @@ function AppWrapper() {
   );
 }
 
+
 export default function App() {
   return (
     <AuthProvider>
@@ -51,17 +53,3 @@ export default function App() {
     </AuthProvider>
   );
 }
-
-// import { NavigationContainer } from "@react-navigation/native";
-// import { AuthProvider } from "./services/auth";
-// import MainNavigator from "./navigators/MainNav";
-
-// export default function App() {
-//   return (
-//     <AuthProvider>
-//       <NavigationContainer>
-//         <MainNavigator />
-//       </NavigationContainer>
-//     </AuthProvider>
-//   );
-// }

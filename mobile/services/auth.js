@@ -111,6 +111,8 @@
 // };
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from "expo-secure-store";
+import { API } from '../services/api';
 
 const AuthContext = createContext({});
 
@@ -122,6 +124,23 @@ export const useAuth = () => {
   return context;
 };
 
+const getCurrentUser = async () => {
+  try {
+    // get token from SecureStore (or AsyncStorage if you prefer)
+    const token = await SecureStore.getItemAsync("token");
+    if (!token) throw new Error("No token found");
+
+    // set Axios header
+    API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    // call backend
+    const response = await API.get("/user/me"); // adjust endpoint if needed
+    return response.data; // assuming backend sends user data in .data
+  } catch (err) {
+    console.error("Error fetching current user:", err);
+    throw err;
+  }
+};
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -166,23 +185,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // const login = async (userToken, userData) => {
-  //     try {
-  //         // Store token and user data in AsyncStorage
-  //         await AsyncStorage.setItem('userToken', userToken);
-  //         await AsyncStorage.setItem('userData', JSON.stringify(userData));
-
-  //         // Update state
-  //         setToken(userToken);
-  //         setUser(userData);
-
-  //         return true;
-  //     } catch (error) {
-  //         console.error('Error storing auth data:', error);
-  //         return false;
-  //     }
-  // };
-
   const logout = async () => {
     try {
       // Remove token and user data from AsyncStorage
@@ -192,6 +194,8 @@ export const AuthProvider = ({ children }) => {
       // Clear state
       setToken(null);
       setUser(null);
+
+      console.log('User logged out successfully');
 
       return true;
     } catch (error) {
@@ -218,6 +222,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     getToken,
     isAuthenticated,
+    getCurrentUser
   };
 
   return (

@@ -1,155 +1,99 @@
-import React, { useRef, useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Animated,
-  StatusBar,
-  Dimensions,
-  Platform,
-  Easing,
-  Image,
-} from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import React, { useState, useEffect } from "react";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import styles from "../styles/commonStyles";
+import * as SecureStore from "expo-secure-store";
+import { API } from "../services/api";
+import { useAuth } from "../services/auth";
 
-const { width } = Dimensions.get("window");
-
-export default function Home({ navigation }) {
-  const statusBarHeight =
-    Platform.OS === "android" ? StatusBar.currentHeight : 0;
-
-  const images = [
-    require("../assets/sep2.png"),
-    require("../assets/sep1.png"),
-    require("../assets/sep3.png"),
+export default function Dashboard() {
+  const [userName, setUserName] = useState("");
+  const { getCurrentUser } = useAuth();
+  const activities = [
+    { icon: "cart-outline", label: "Shopping", amount: "-₱600.00", color: "#FF6B6B" },
+    { icon: "film-outline", label: "Movie", amount: "-₱120.00", color: "#FFA500" },
+    { icon: "swap-horizontal-outline", label: "Transfer", amount: "+₱900.00", color: "#38B000" },
   ];
-
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const fadeAnim = useRef(new Animated.Value(1)).current;
-  const slideAnim = useRef(new Animated.Value(0)).current;
-
-  const nextIndex = (currentIndex + 1) % images.length;
+  //change code logic later
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 600,
-          useNativeDriver: true,
-          easing: Easing.out(Easing.ease),
-        }),
-        Animated.timing(slideAnim, {
-          toValue: -width * 0.1,
-          duration: 600,
-          useNativeDriver: true,
-          easing: Easing.out(Easing.ease),
-        }),
-      ]).start(() => {
-        setCurrentIndex(nextIndex);
+    async function fetchUser() {
+      try {
+        // Check if token exists
+        const token = await SecureStore.getItemAsync('token');
+        console.log("Token from SecureStore:", token);
 
-        fadeAnim.setValue(0);
-        slideAnim.setValue(width * 0.1);
+        if (!token) {
+          console.log("No token found, skipping fetchUser.");
+          return; // don't call /me if no token
+        }
 
-        Animated.parallel([
-          Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 700,
-            useNativeDriver: true,
-            easing: Easing.inOut(Easing.ease),
-          }),
-          Animated.timing(slideAnim, {
-            toValue: 0,
-            duration: 700,
-            useNativeDriver: true,
-            easing: Easing.inOut(Easing.ease),
-          }),
-        ]).start();
-      });
-    }, 3500);
+        // Set Axios header
+        API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        console.log("Authorization header set:", API.defaults.headers.common['Authorization']);
 
-    return () => clearInterval(interval);
-  }, [currentIndex]);
+        // Fetch user from backend
+        const user = await getCurrentUser();
+        console.log("Fetched user from API:", user);
+
+        // Update state
+        setUserName(user.name);
+        console.log("State updated, userName:", user.name);
+      } catch (err) {
+        console.error("Error in fetchUser:", err);
+      }
+    }
+
+    fetchUser();
+  }, []);
 
   return (
-    <View style={[styles.homeSafe, { paddingTop: statusBarHeight }]}>
-      <StatusBar barStyle="dark-content" backgroundColor="#E6FAEE" />
-      <LinearGradient
-        colors={["#E6FAEE", "#F6FFF8"]}
-        style={styles.homeGradient}
+    <View style={styles.dashboardContainer}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
       >
-        {/* Carousel container */}
-        <View
-          style={{
-            width,
-            height: 300,
-            justifyContent: "center",
-            alignItems: "center",
-            overflow: "hidden",
-          }}
-        >
-          <Animated.Image
-            key={currentIndex}
-            source={images[currentIndex]}
-            style={{
-              width: width * 1,
-              height: 290,
-              resizeMode: "contain",
-              opacity: fadeAnim,
-              transform: [{ translateX: slideAnim }],
-              renderToHardwareTextureAndroid: true,
-              shouldRasterizeIOS: true,
-            }}
-          />
+        {/* Header */}
+        <View style={styles.headerContainer}>
+          <View>
+            <Text style={styles.greetingText}>Welcome back,</Text>
+            <Text style={styles.userName}>{userName ? `${userName} !` : "..."}</Text>
+            {/* <Text style={styles.userName}>Ky!</Text> */}
+          </View>
+          <Ionicons name="notifications-outline" size={28} color="#2F3E46" />
         </View>
 
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            marginTop: 90,
-          }}
-        >
-          {images.map((_, i) => (
-            <View
-              key={i}
-              style={{
-                width: 8,
-                height: 8,
-                borderRadius: 4,
-                marginHorizontal: 5,
-                backgroundColor: i === currentIndex ? "#2ecc71" : "#cfd8dc",
-              }}
-            />
+        {/* Balance Summary */}
+        <View style={styles.balanceCard}>
+          <Text style={styles.balanceTitle}>Overall Balance</Text>
+          <Text style={styles.balanceAmount}>₱12,991.00</Text>
+          <View style={styles.balanceRow}>
+            <Text style={styles.balanceLabel}>Debit Card</Text>
+            <Text style={styles.balanceLabel}>Cash</Text>
+          </View>
+          <View style={styles.balanceRow}>
+            <Text style={styles.balanceValue}>₱8,351.00</Text>
+            <Text style={styles.balanceValue}>₱4,640.00</Text>
+          </View>
+        </View>
+
+        {/* Recent Activity */}
+        <View style={styles.activitySection}>
+          <Text style={styles.sectionTitle}>Recent Activity</Text>
+          {activities.map((item, index) => (
+            <View key={index} style={styles.activityItem}>
+              <View style={styles.activityLeft}>
+                <Ionicons name={item.icon} size={24} color={item.color} />
+                <Text style={styles.activityLabel}>{item.label}</Text>
+              </View>
+              <Text style={[styles.activityAmount, { color: item.color }]}>
+                {item.amount}
+              </Text>
+            </View>
           ))}
         </View>
+      </ScrollView>
 
-        <Text style={styles.homeTitle}>Helps you to track your expenses.</Text>
-        <Text style={styles.homeSubtitle}>
-          Stay on top of your spending, budget smartly, and reach your financial
-          goals.
-        </Text>
-
-        {/* Buttons */}
-        <TouchableOpacity
-          style={styles.homeButton}
-          activeOpacity={0.85}
-          onPress={() => navigation.navigate("Register")}
-        >
-          <Text style={styles.homeButtonText}>Let’s Start!</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.homeLinkWrapper}
-          onPress={() => navigation.navigate("Login")}
-        >
-          <Text style={styles.homeLinkText}>
-            Already have an account?{" "}
-            <Text style={styles.homeLinkHighlight}>Sign In</Text>
-          </Text>
-        </TouchableOpacity>
-      </LinearGradient>
     </View>
   );
 }
