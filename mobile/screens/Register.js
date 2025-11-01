@@ -4,15 +4,10 @@ import { View, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-nat
 import axios from 'axios';
 import styles from '../styles/commonStyles';
 import { API } from '../services/api';
-import { useAuth } from '../services/auth';
-import * as SecureStore from 'expo-secure-store';  // Add this import
-
-
 export default function Register({ navigation }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useAuth();
 
   const [isLoading, setIsLoading] = useState(false);
 

@@ -14,7 +14,6 @@ export default function Dashboard() {
     { icon: "film-outline", label: "Movie", amount: "-₱120.00", color: "#FFA500" },
     { icon: "swap-horizontal-outline", label: "Transfer", amount: "+₱900.00", color: "#38B000" },
   ];
-  //change code logic later
 
   useEffect(() => {
     async function fetchUser() {
@@ -25,10 +24,9 @@ export default function Dashboard() {
 
         if (!token) {
           console.log("No token found, skipping fetchUser.");
-          return; // don't call /me if no token
+          return; 
         }
-
-        // Set Axios header
+        
         API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         console.log("Authorization header set:", API.defaults.headers.common['Authorization']);
 

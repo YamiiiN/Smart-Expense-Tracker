@@ -104,12 +104,6 @@ export default function Profile() {
     }
   };
 
-  // const handleLogout = async () => {
-  //   Alert.alert("Logged Out", "You have been successfully logged out.", [
-  //     { text: "OK", onPress: () => logout() }
-  //   ]);
-  // };
-
   const handleLogout = async () => {
     Alert.alert(
       "Logout",
@@ -124,7 +118,6 @@ export default function Profile() {
           onPress: async () => {
             try {
               await logout();
-              // Use replace instead of reset
               navigation.replace('Start');
             } catch (error) {
               console.error("Logout error:", error);

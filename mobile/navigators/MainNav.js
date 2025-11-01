@@ -16,7 +16,6 @@ export default function MainNavigator() {
       tabBar={(props) => <CustomTabBar {...props} />}
     >
       <Tab.Screen name="Home" component={HomeNav} />
-      {/* <Tab.Screen name="Start" component={StartNav} /> */}
       <Tab.Screen name="Upload" component={UploadNav} /> 
       <Tab.Screen name="Stats" component={StatsNav} /> 
       <Tab.Screen name="Profile" component={ProfileNav} />

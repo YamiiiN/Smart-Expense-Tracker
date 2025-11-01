@@ -17,26 +17,3 @@ export async function setTokenHeader() {
 }
 
 setTokenHeader();
-
-// Upload avatar
-// export async function uploadAvatar(uri, filename = 'avatar.jpg') {
-//   try {
-//     const form = new FormData();
-//     form.append("file", {
-//       uri,
-//       name: filename,
-//       type: "image/jpeg"
-//     });
-
-//     const res = await API.post("/upload-avatar", form, {
-//       headers: { "Content-Type": "multipart/form-data" }
-//     });
-
-//     return res.data.url; // Cloudinary URL
-//   } catch (error) {
-//     console.error("Error uploading avatar:", error);
-//     throw error;
-//   }
-// }
-
-// Register
