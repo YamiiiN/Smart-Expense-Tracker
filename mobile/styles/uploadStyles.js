@@ -200,4 +200,11 @@ export default StyleSheet.create({
     textAlign: 'center',
     marginTop: 15,
   },
+  statusFailed: {
+    backgroundColor: '#FFEAEA',
+    borderColor: '#FFD6D6',
+  },
+  statusTextFailed: {
+    color: '#FF4444',
+  },
 });

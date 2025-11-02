@@ -12,4 +12,5 @@ class ReceiptOut(BaseModel):
     date: datetime
     total: Optional[float]    
     category: str
+    status: str
     userid: str

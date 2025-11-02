@@ -11,7 +11,6 @@ export default function Upload() {
   const [isLoading, setIsLoading] = useState(false);
   const [recentUploads, setRecentUploads] = useState([]);
 
-  // Fetch recent uploads
   const fetchRecentUploads = async () => {
     try {
       const response = await API.get('/receipt/recent');
@@ -21,7 +20,6 @@ export default function Upload() {
     }
   };
 
-  // Upload file to server
   const uploadToServer = async (uri) => {
     try {
       setIsLoading(true);
@@ -43,7 +41,10 @@ export default function Upload() {
       });
 
       if (response.data.success) {
-        Alert.alert('Success', 'Receipt uploaded successfully!');
+        Alert.alert(
+          response.data.data.status === 'success' ? 'Success' : 'Warning',
+          response.data.message
+        );
         await fetchRecentUploads();
       }
     } catch (error) {
@@ -57,7 +58,6 @@ export default function Upload() {
     }
   };
 
-  // Pick image from gallery
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
@@ -76,7 +76,6 @@ export default function Upload() {
     }
   };
 
-  // Take photo using camera
   const takePhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
@@ -94,7 +93,6 @@ export default function Upload() {
     }
   };
 
-  // Show upload options
   const handleUpload = () => {
     Alert.alert(
       'Upload Receipt',
@@ -191,7 +189,7 @@ export default function Upload() {
                       styles.statusBadge,
                       item.status === 'success'
                         ? styles.statusSuccess
-                        : styles.statusPending,
+                        : styles.statusFailed
                     ]}
                   >
                     <Text
@@ -199,13 +197,12 @@ export default function Upload() {
                         styles.statusText,
                         item.status === 'success'
                           ? styles.statusTextSuccess
-                          : styles.statusTextPending,
+                          : styles.statusTextFailed
                       ]}
                     >
-                      ✓ Success
+                      {item.status === 'success' ? '✓ Success' : '✗ OCR Failed'}
                     </Text>
                   </View>
-
                 </View>
               </View>
             ))
