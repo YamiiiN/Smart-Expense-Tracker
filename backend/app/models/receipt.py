@@ -3,12 +3,13 @@ from typing import Optional
 from datetime import datetime
 
 class ReceiptCreate(BaseModel):
-    category: str  # shopping, food, essentials, others
-
+    category: str 
 class ReceiptOut(BaseModel):
     id: str
+    name: str                
+    size: str                
     image_url: str
     date: datetime
-    total: Optional[float]
+    total: Optional[float]    
     category: str
     userid: str
