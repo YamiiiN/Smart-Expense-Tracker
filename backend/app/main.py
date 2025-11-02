@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from app.routes import user
 from app.routes import receipt
 from app.routes import ocr_test
+from app.routes import stats
 
 app = FastAPI(
     title="Smart Expense Tracker",
@@ -13,6 +14,7 @@ app = FastAPI(
 app.include_router(user.router) 
 app.include_router(receipt.router)
 app.include_router(ocr_test.router)
+app.include_router(stats.router)
 
 @app.get("/")
 def root():
