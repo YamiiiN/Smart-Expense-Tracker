@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image, Alert } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import * as ImagePicker from "expo-image-picker";
-import { API, getCurrentUser } from "../services/api";
 import styles from "../styles/commonStyles";
 import { useNavigation } from "@react-navigation/native";
-import { useAuth } from "../services/auth";
+import { API, useAuth } from "../services/auth";
 
 
 export default function Profile() {
@@ -17,7 +16,7 @@ export default function Profile() {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { logout } = useAuth();
+  const { logout, getCurrentUser } = useAuth();
 
   // Fetch current user info
   useEffect(() => {
@@ -25,22 +24,36 @@ export default function Profile() {
   }, []);
 
   const fetchUser = async () => {
-    try {
-      const token = await SecureStore.getItemAsync("token");
-      if (!token) return;
+  try {
+    const data = await getCurrentUser();
+    setUser({
+      name: data.name,
+      email: data.email,
+      avatar: data.avatar || data.avatar_url || "",
+    });
+  } catch (error) {
+    console.log("Error fetching user:", error);
+  }
+};
 
-      API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      const data = await getCurrentUser();
 
-      setUser({
-        name: data.name,
-        email: data.email,
-        avatar: data.avatar || data.avatar_url || "",
-      });
-    } catch (error) {
-      console.log("Error fetching user:", error);
-    }
-  };
+  // const fetchUser = async () => {
+  //   try {
+  //     const token = await SecureStore.getItemAsync("token");
+  //     if (!token) return;
+
+  //     API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  //     const data = await getCurrentUser();
+
+  //     setUser({
+  //       name: data.name,
+  //       email: data.email,
+  //       avatar: data.avatar || data.avatar_url || "",
+  //     });
+  //   } catch (error) {
+  //     console.log("Error fetching user:", error);
+  //   }
+  // };
 
   // Choose new avatar
   const pickImage = async () => {
