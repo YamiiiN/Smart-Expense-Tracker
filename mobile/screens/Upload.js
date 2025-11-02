@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Alert, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import styles from '../styles/uploadStyles';
 import * as ImagePicker from 'expo-image-picker';
@@ -106,12 +106,6 @@ export default function Upload() {
       { cancelable: true }
     );
   };
-
-  const handleDelete = (id) => {
-    console.log('Delete pressed for id:', id);
-    // TODO: Add delete API logic here
-  };
-
   useEffect(() => {
     fetchRecentUploads();
   }, []);
@@ -176,12 +170,19 @@ export default function Upload() {
                 ]}
               >
                 <View style={styles.receiptIcon}>
-                  <Ionicons name="image-outline" size={24} color="#2FAF7B" />
+                  {item.image_url ? (
+                    <Image
+                      source={{ uri: item.image_url }}
+                      style={{ width: 40, height: 40, borderRadius: 4, resizeMode: 'cover' }}
+                    />
+                  ) : (
+                    <Ionicons name="image-outline" size={24} color="#2FAF7B" />
+                  )}
                 </View>
                 <View style={styles.receiptInfo}>
                   <Text style={styles.receiptTitle}>{item.name}</Text>
                   <Text style={styles.receiptMeta}>
-                    {item.size} as of {item.date}
+                    {item.size}{'\n'}{item.date}
                   </Text>
                 </View>
                 <View style={styles.receiptActions}>
@@ -204,12 +205,7 @@ export default function Upload() {
                       ✓ Success
                     </Text>
                   </View>
-                  <TouchableOpacity
-                    style={styles.deleteButton}
-                    onPress={() => handleDelete(item.id)}
-                  >
-                    <Ionicons name="close-circle" size={24} color="#FF6B6B" />
-                  </TouchableOpacity>
+
                 </View>
               </View>
             ))
