@@ -442,16 +442,21 @@ dashboardContainer: {
     justifyContent: "space-between",
   },
   balanceLabel: {
-    fontSize: 15,
+    fontSize: 16,
     color: "#6B9080",
+	
   },
   balanceBox: {
     alignItems: "center",
   },
   balanceValue: {
-    fontSize: 16,
+    // fontSize: 16,
+    // fontWeight: "bold",
+    // color: "#2F3E46",
+	fontSize: 22,
     fontWeight: "bold",
     color: "#2F3E46",
+    marginBottom: 15,
   },
   activitySection: {
     marginBottom: 10,
