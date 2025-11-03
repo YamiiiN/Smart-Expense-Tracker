@@ -114,6 +114,7 @@ export default StyleSheet.create({
     fontWeight: '700',
     color: THEME.text,
     marginBottom: 15,
+    textAlign: 'center',
   },
 
   chartContainer: {
@@ -198,20 +199,21 @@ export default StyleSheet.create({
 
   horizontalChartWrapper: {
     marginTop: 10,
-    marginBottom: 25,
+    marginBottom: 50,
     alignItems: 'center',
+    alignContent: 'center',
   },
 
   horizontalLabelsContainer: {
-    gap: 8,
+    gap: 2,
   },
 
   horizontalLabelRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 4,
-    marginTop: 1.5,
+    paddingVertical: 3,
+    marginTop: 2,
   },
 
   horizontalLabel: {
