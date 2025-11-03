@@ -198,32 +198,33 @@ export default StyleSheet.create({
   },
 
   horizontalChartWrapper: {
-    marginTop: 10,
-    marginBottom: 50,
+    marginTop: 5,
+    marginBottom: 90,
     alignItems: 'center',
     alignContent: 'center',
   },
 
   horizontalLabelsContainer: {
-    gap: 2,
+    gap: 2.5,
+    fontSize: 7,
   },
 
   horizontalLabelRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 3,
-    marginTop: 2,
+    paddingVertical: 2,
+    marginTop: 4,
   },
 
   horizontalLabel: {
     fontSize: 14,
     color: THEME.muted,
-    fontWeight: '900',
+    fontWeight: '800',
   },
 
   horizontalValue: {
-    fontSize: 11,
+    fontSize: 10,
     color: THEME.text,
     fontWeight: '700',
     marginLeft: 'auto'

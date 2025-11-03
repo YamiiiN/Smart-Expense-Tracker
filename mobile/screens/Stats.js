@@ -96,7 +96,7 @@ export default function Stats() {
           <View style={styles.summaryDivider} />
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Month</Text>
-            <Text style={styles.summaryValue}>May 2025</Text>
+            <Text style={styles.summaryValue}>Nov 2025</Text>
           </View>
         </View>
 
@@ -164,24 +164,23 @@ export default function Stats() {
           data={horizontalBarData}
           width={220}
           height={100}
-          barWidth={30}
-          spacing={28}
+          barWidth={15}
+          spacing={25}
           horizontal
           roundedTop
           roundedBottom
           hideRules
           xAxisThickness={0}
           yAxisThickness={0}
-          // hideYAxisText
           noOfSections={4}
           maxValue={Math.max(...horizontalBarData.map(item => item.value)) + 120}
           isAnimated
           animationDuration={800}
           barBorderRadius={10}
           showFractionalValues
-          yAxisLabelWidth={220} // adds space for category labels
-          yAxisLabelTexts={170}
-          textAlign="left"
+          yAxisLabelWidth={210} // adds space for category labels
+          YAxisLabelTexts={190}
+          textAlign="center"
           barDataStyle={{ fontSize: 12, color: '#6B7A78', marginRight: 20, marginBottom: 20 }}
         />
       </View>
