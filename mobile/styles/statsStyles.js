@@ -133,6 +133,8 @@ export default StyleSheet.create({
     backgroundColor: THEME.card,
     borderRadius: 18,
     padding: 18,
+    marginTop: 25,
+    marginBottom: 20,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -196,7 +198,7 @@ export default StyleSheet.create({
 
   horizontalChartWrapper: {
     marginTop: 10,
-    marginBottom: 15,
+    marginBottom: 25,
     alignItems: 'center',
   },
 
@@ -209,17 +211,19 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 4,
+    marginTop: 1.5,
   },
 
   horizontalLabel: {
-    fontSize: 12,
+    fontSize: 14,
     color: THEME.muted,
-    fontWeight: '600',
+    fontWeight: '900',
   },
 
   horizontalValue: {
     fontSize: 11,
     color: THEME.text,
     fontWeight: '700',
+    marginLeft: 'auto'
   },
 });

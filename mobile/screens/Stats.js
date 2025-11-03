@@ -156,13 +156,13 @@ export default function Stats() {
             </View>
 
             {/* Horizontal Bar Chart for Category Totals */}
-            <View style={styles.smallChartContainer}>
+            {/* <View style={styles.smallChartContainer}>
               <Text style={styles.chartTitle}>Top Spending Categories</Text>
               <View style={styles.horizontalChartWrapper}>
                 <BarChart
                   data={horizontalBarData}
                   width={130}
-                  height={140}
+                  height={150}
                   barWidth={18}
                   spacing={12}
                   horizontal
@@ -172,7 +172,7 @@ export default function Stats() {
                   xAxisThickness={0}
                   yAxisThickness={0}
                   hideYAxisText
-                  noOfSections={3}
+                  noOfSections={4}
                   maxValue={Math.max(...horizontalBarData.map(item => item.value)) + 100} // Adjust max value
                   isAnimated
                   animationDuration={800}
@@ -188,7 +188,45 @@ export default function Stats() {
                   </View>
                 ))}
               </View>
-            </View>
+            </View> */}
+            <View style={styles.smallChartContainer}>
+            <Text style={styles.chartTitle}>Top Spending Categories</Text>
+
+  <View style={styles.horizontalChartWrapper}>
+    <BarChart
+      data={horizontalBarData}
+      width={230}
+      height={180}
+      barWidth={30}
+      spacing={28}
+      horizontal
+      roundedTop
+      roundedBottom
+      hideRules
+      xAxisThickness={0}
+      yAxisThickness={0}
+      hideYAxisText
+      noOfSections={4}
+      maxValue={Math.max(...horizontalBarData.map(item => item.value)) + 100}
+      isAnimated
+      animationDuration={800}
+      barBorderRadius={10}
+      showFractionalValues
+      yAxisLabelWidth={160} // adds space for category labels
+      yAxisLabelTexts={120}
+    />
+  </View>
+
+  <View style={styles.horizontalLabelsContainer}>
+    {horizontalBarData.map((item, index) => (
+      <View key={index} style={styles.horizontalLabelRow}>
+        <Text style={styles.horizontalLabel}>{item.label}</Text>
+        <Text style={styles.horizontalValue}>₱{item.value}</Text>
+      </View>
+    ))}
+  </View>
+</View>
+
           </>
         )}
       </ScrollView >
