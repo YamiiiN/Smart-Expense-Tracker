@@ -99,8 +99,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 60,
     borderTopWidth: 1,
-    borderTopColor: "#ddd",
-    backgroundColor: "#fff",
+    borderTopColor: "#000000ff",
+    backgroundColor: "#f6f6f6ff",
   },
   navButton: {
     flex: 1,

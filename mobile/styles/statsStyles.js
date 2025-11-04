@@ -110,7 +110,7 @@ export default StyleSheet.create({
   },
 
   chartTitle: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: '700',
     color: THEME.text,
     marginBottom: 15,
@@ -177,7 +177,7 @@ export default StyleSheet.create({
   pieChartWrapper: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 10,
+    marginVertical: 35,
   },
 
   centerLabel: {
@@ -229,4 +229,31 @@ export default StyleSheet.create({
     fontWeight: '700',
     marginLeft: 'auto'
   },
+  legendContainer: {
+  marginTop: 15,
+  width: '100%',
+  flexWrap: 'wrap',
+  flexDirection: 'row',
+  justifyContent: 'center',
+},
+
+legendItem: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginHorizontal: 8,
+  marginBottom: 6,
+},
+
+legendColorBox: {
+  width: 12,
+  height: 12,
+  borderRadius: 3,
+  marginRight: 6,
+},
+
+legendText: {
+  fontSize: 12,
+  color: '#333',
+},
+
 });
