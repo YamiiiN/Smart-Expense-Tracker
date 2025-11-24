@@ -112,13 +112,14 @@ export default StyleSheet.create({
   chartTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: THEME.text,
-    marginBottom: 15,
+    marginBottom: 12,
+    color: '#333',
   },
 
   chartContainer: {
     alignItems: 'center',
     paddingVertical: 10,
+    marginTop: 0,
   },
 
   // Charts Row (Donut + Horizontal Bars)
@@ -129,53 +130,49 @@ export default StyleSheet.create({
   },
 
   smallChartContainer: {
-    flex: 1,
-    backgroundColor: THEME.card,
-    borderRadius: 18,
-    padding: 18,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.08,
-        shadowRadius: 8,
-      },
-      android: {
-        elevation: 4,
-      },
-    }),
+    backgroundColor: '#f9f9f9',
+    borderRadius: 16,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 2,
   },
 
   // Donut Chart Legend
   legendContainer: {
-    marginTop: 10,
-    gap: 8,
-  },
+  marginTop: 15,
+  width: '100%',
+  flexWrap: 'wrap',
+  flexDirection: 'row',
+  justifyContent: 'center',
+},
 
-  legendItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
+legendItem: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginHorizontal: 8,
+  marginBottom: 6,
+},
 
-  legendDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-  },
+legendColorBox: {
+  width: 12,
+  height: 12,
+  borderRadius: 3,
+  marginRight: 6,
+},
 
-  legendText: {
-    fontSize: 13,
-    color: THEME.muted,
-    fontWeight: '500',
-  },
+legendText: {
+  fontSize: 12,
+  color: '#333',
+},
 
   // Gifted Charts specific styles
   pieChartWrapper: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 10,
-  },
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginTop: 10,
+},
 
   centerLabel: {
     alignItems: 'center',
@@ -183,43 +180,59 @@ export default StyleSheet.create({
   },
 
   centerLabelText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: THEME.text,
-  },
+  fontSize: 16,
+  fontWeight: 'bold',
+  color: '#2FAF7B',
+  textAlign: 'center',
+},
 
   centerLabelSubtext: {
-    fontSize: 11,
-    color: THEME.muted,
-    marginTop: 2,
-  },
+  fontSize: 12,
+  color: '#6B7A78',
+  textAlign: 'center',
+},
 
-  horizontalChartWrapper: {
-    marginTop: 10,
-    marginBottom: 15,
+   horizontalChartWrapper: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 80, // space between chart and labels
   },
-
+  headerSubtitle: {
+  fontSize: 14,
+  color: '#6B7A78',
+  marginTop: 4,
+},
   horizontalLabelsContainer: {
-    gap: 8,
-  },
+  marginTop: 10,
+  paddingHorizontal: 10,
+},
 
   horizontalLabelRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 4,
-  },
-
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginVertical: 4,
+},
   horizontalLabel: {
-    fontSize: 12,
-    color: THEME.muted,
-    fontWeight: '600',
-  },
-
+  fontSize: 13,
+  color: '#333',
+  flex: 1,
+},
   horizontalValue: {
-    fontSize: 11,
-    color: THEME.text,
-    fontWeight: '700',
-  },
+  fontSize: 13,
+  color: '#2FAF7B',
+  fontWeight: '600',
+  marginLeft: 8,
+},
+chartCard: {
+  backgroundColor: '#fff',
+  borderRadius: 16,
+  paddingVertical: 20,
+  paddingHorizontal: 16,
+  marginBottom: 20,
+  shadowColor: '#000',
+  shadowOpacity: 0.08,
+  shadowRadius: 6,
+  elevation: 2,
+},
 });
